@@ -1,0 +1,74 @@
+// Press CTRL + B to hide and unhide the explorer of vs code;
+
+*************************** Inversion of Control(IoC) ********************************
+
+> Outsource to an object factory
+    > The approach of outsourcing the construction and management of objects;
+
+>> Spring Container:
+> Primary functions:
+  > Create and manage objects(Inversion of Control)
+  > Inject object's dependencies(Dependency Injection) 
+
+> Configuring Spring Container:
+  > XML configuration file(legacy, but most legacy apps still use this)
+  > Java Annotations(modern)
+  > Java Source Code(modern)
+
+> Spring Development Process
+  > Configure your Spring Beans
+  > Create a Spring Container
+  > Retrieve Beans from Spring Conatiner 
+
+> Step 1: Configure your Spring Beans 
+Example: applicationContext.xml 
+<beans ... >
+    <bean id="myCoach"
+       class="com.luv2code.springdemo.BaseballCoach">
+    </bean>
+</beans>
+
+> the "id" is like an alias; 'id' is used to retrieve a bean from a spring container;
+> 'class': fully qualified class name of implementation class;
+
+> Step 2: Create a Spring Conatiner
+  > Spring container is generically known as "ApplicationContext"
+
+  > Specialized implementations
+    > ClassPathXmlApplicationContext
+    > AnnotationConfigApplicationContext
+    > GenericWebApplicationContext
+    > others
+
+Example:
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+// Here applicationContext.xml is name of config file;
+
+> Step 3: Retrieve Beans from Container
+
+> "MyApp" asks "Give me a 'Coach' object" from Spring(which is a object factory) and it have an configuration 
+  file which contains all implementation of classes related to 'Coach' and at last Spring return 'Coach' object;
+Example:
+
+// Create a spring container
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+// retrieve bean from spring container
+Coach theCoach = context.getBean("myCoach", Coach.class);
+// Here "myCoach" is a bean id and 'Coach.class' is class which is assigned to this bean;
+
+
+> What is a Spring Bean?
+> A "Spring Bean" is simply a java object;
+> When Java objects are created by the Spring Container, then Spring refers to them as "Spring Beans";
+> Spring Beans are created from normal Java classes ... just like java objects;
+
+>> App should be configurable: Using Spring Beans we can make an app configurable;
+>> Easily change the coach for another sport: We can use interface to obtain this;
+   > Like we can make an interface named 'Coach' and one method will there like 'getDailyWorkout()' and which 
+     will be overriden by every new class which implements 'Coach' interface and like this we can achieve this;
+
+> We use configuration file so we don't have to change the code every time, so basically we use configuration 
+  file so we can minimize source code changes to do similar type of job;
+
+  
