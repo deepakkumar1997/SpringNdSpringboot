@@ -1,0 +1,192 @@
+****************************** Dependency Injection ***********************************
+
+> Allows a program design to follow the 
+  > The dependency inversion principle;
+
+> The client delegates to calls to another object the reponsibility of providing its dependencies;
+
+Example: 
+        I'm going to buy a car and this car is built at the factory on demand. So, there's nothing in the car 
+lot, you've to actually talk to the factory and put in a request and they'll build the car for you. So, at the 
+factory, you've all the different parts for the car. You have like the car chassis, have the engine, the tires,
+the seats, the electronics, the exhaust, and so on. And the mechanics or the assemblers there, the technicians
+they'll actually assemble the car for you and then deliver to you the final car. So, you don't have to actually
+build the car, the car is already built for you ar the factory. So, they actually inject all of the dependencies
+for the car. So, they inject the engine, they inject the tires, the seats, and so on. So, that's basically what 
+you have here with dependency Injection.
+
+> So, you simply outsource the construction and injection of your object to an external entity. In this case, 
+  that's the car factory;
+
+> "dependency" same thing as "helper objects";
+
+> So, just like you get a car that's ready to drive, here(Spring(Object factory)) you'll get an object that's 
+  ready to use;
+
+>> Spring Conatiner:
+> Primary functions:
+  > Create and manage objects(Inversion of Control)
+  > Inject object's dependencies(Dependency Injection)
+  
+>> Injection Types:
+> There are many types of injection with Spring;
+> Two most commonly used:
+  > Conctructor Injection 
+  > Setter Injection 
+
+*************************************** Constructor Injection **********************************************
+
+>> Development Process - Constructor Injection 
+   1> Define the dependency interface and class 
+   2> Create a constructor in your class for injections
+   3> Configure the dependency injection in Spring config file;
+
+Step 1 : Define the dependency interface and class 
+File: FortuneService.java 
+public interface FortuneService{
+    public String getFortune();
+} 
+
+File: HappyFortuneService.java 
+public class HappyFortuneService implements FortuneService{
+    public String getFortune(){
+        return "Today is your lucky day!";
+    }
+}
+
+Step 2 : Create a constructor  in your class for injections
+File: BaseballCoach.java 
+public class BaseballCoach implements Coach {
+    private FortuneService fortuneService;
+    
+    public BaseballCoach(FortuneService theForturneService){
+        fortuneService = theForturneService;
+    }
+}
+
+Step 3 : Configure the dependency injection in Spring config file
+File: applicationContext.xml
+
+<bean id="myFortuneService"
+   class="com.luv2code.springdemo.HappyFortuneService">
+</bean>
+// Work done behind the scenes by spring for above bean 
+HappyFortuneService myFortuneService = new HappyFortuneService();
+
+<bean id="myCoach"
+   class="com.luv2code.springdemo.BaseballCoach">
+   <constructor-arg ref="myFortuneService" />
+</bean>
+// Work done behind the scenes by spring for above bean 
+BaseballCoach myCoach = new BaseballCoach(myFortuneService);
+
+> So bean "myFortuneService" is a dependency/helper;
+> And "constructor-arg" through this we're injecting the dependency/helper using "constructor injection";
+
+
+
+****************************************** Setter Injection ************************************************
+
+> Inject dependencies by calling setter method(s) on your class;
+
+>> Development Process - Setter Injection
+1> Create setter method(s) in your class for injections;
+2> Configure the dependency injection in Spring config file;
+
+Step 1 : Create setter method(s) in your class for injections
+File: CricketCoach.java
+public class CricketCoach implements Coach{
+    private FortuneService fortuneService;
+
+    public CricketCoach(){
+
+    }
+
+    public void setFortuneService(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+}
+
+Step 2 : Configure the dependency injecting in Spring config file 
+File: applicationContext.xml
+
+<bean id="myFortuneService"
+   class="com.luv2code.springdemo.HappyFortuneService">
+</bean>
+
+<bean id="myCricketCoach"
+   class="com.luv2code.springdemo.CricketCoach">
+
+   <property name="fortuneService" ref="myFortuneService" />
+
+</bean>
+
+// How above code is processed by Spring in backgroud
+CricketCoach myCricketCoach = new CricketCoach();
+myCricketCoach.setFortuneService(myFortuneService);
+
+********************************** Injecting Literal Values *****************************************
+>> Development Process 
+1> Create setter method(s) in your class for injections 
+2> Configure the injection in Spring config file 
+
+Step 1 : Create setter method(s) in your class for injections 
+File: CricketCoach.java
+public class CricketCoach implements Coach {
+    private String emailAddress;
+    private String team;
+
+    // Setter
+    public void setEmailAddress(String emailAddress){
+        this.emailAddress = emailAddress;
+    }
+    public void setTeam(String team){
+        this.team = team;
+    }
+}
+
+Step 2 : Configure the injection in Spring config file 
+File: applicationContext.xml
+
+<bean id="myCricketCoach"
+   class="aualifiedName.CricketCoach">
+   <property name="fortuneService" ref="myFortuneService" />
+   <property name="emailAddress" value="thebestcoach@dk.com" />
+   <property name="team" value="Mumbai Indians" />
+</bean>
+
+*************************** Injecting Values from Properties File *****************************
+
+> Inject literal values from a properties file;
+
+>> Development Process:
+1> Create Properties file 
+2> Load Properties file in Spring config file
+3> Reference values from Properties file
+
+Step 1 : Create Properties File 
+FIle: sport.properties
+prop.email = mybestcoach@dkp.com
+prop.team = Royal Challengers Bangalore
+coach.email = mybestcoach@dkp.com
+
+// Here 'prop' is an variable use can use any other name like 'coach.email'
+
+Step 2 : Load Properties file in Spring config file 
+File: applicationContext.xml
+<context:property-placeholder Location="classpath:sport.properties" />
+
+Step 3 : Reference values from Properties file 
+FIle: applicationContext.xml
+
+<bean id="myCricketCoach"
+   class="com.luv2code.springdemo.CricketCoach">
+
+    <!-- set up setter injection -->
+    <property name="fortuneService" ref="myFortuneService" /> 
+    <property name="emailAddress" value="${coach.email}" />
+    <property name="team" value="${prop.team}" />
+</bean>
+
+// To refer value of a properties file use '${the prop name}' in bean;
+
