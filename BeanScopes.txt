@@ -1,0 +1,65 @@
+****************************************** Bean Scopes *********************************************
+
+> Scope refers to the lifecycle of a bean 
+> How long does the bean live?
+> How many instances are created?
+> How is the bean shared?
+
+> Default Scope: Singleton
+
+<bean ... >
+
+    <bean id="myCoach"
+       class="qualifiedName.ClassName">
+       ...
+    </bean>
+</bean>
+
+> What is a Singleton?
+    > Spring Container creates only one instance of the bean, by default 
+    > It is cached in memory
+    > All requests for the bean 
+        > will return a SHARED reference to the SAME bean
+
+Example:
+Coach theCoach = context.getBean("myCoach", Coach.class);
+                                                                                   Spring
+...                                                                             (TrackCoach)
+
+Coach alphaCoach = context.getBean("myCoach", Coach.class);
+// So both 'theCoach' and 'alphaCoach' will refer to the same object if they are using same bean id and that is 
+// 'myCoach';
+
+> Explicitly specify bean scope:
+
+<beans ... >
+    <bean    id="myCoach"
+          class="qualifiedName"
+          scope="singleton">
+    ...
+    </bean>
+</beans>
+
+>> Additional Spring Bean Scopes
+
+        Scope                                Description       
+
+      singleton     Creates a single shared instance of the bean. Default scope.
+      prototype     Creates a new bean instance for each container request.
+       request      Scoped to an HTTP web request. Only used for web apps.
+       session      Scoped to an HTTP web session. Only used for web apps.
+    global-session  Scoped to a global HTTP web session. Only used for web apps.
+
+> Prototype Scope Example: 
+  > Prototype scope: new object for each request;
+
+  <beans ... >
+  <bean    id="myCoach"
+        class="qualifiedName"
+        scope="prototype">
+  ...
+  </bean>
+</beans>
+
+> Prototype scope is good for keeping track of stateful data;
+> So when you see 'prototype' scope then think about 'new' keyword so it creates new instance every time it called;

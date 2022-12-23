@@ -1,0 +1,54 @@
+Container Started -> Bean Instantiated -> Dependencies Injected -> Internal Spring Processing -> Your Custom Init Method
+
+> Your custom init method: 
+    > Bean is ready for use;
+> Container is shutdown
+    > Your custom destroy method -> Stop
+
+> Bean Lifecycle Methods/Hooks
+  > You can add custom code during bean initialization
+    > Calling custom business logic methods 
+    > Setting up handles to resources(db, sockets, files etc)
+
+  > You can add custom code during bean destruction
+    > Calling custom business logic method 
+    > Clean up handles to resources (db, sockets, files etc)
+
+> During the bean lifecycle spring allows you to call some of your custom code, and these are what we call hooks;
+  Where you can actually hook in code to execute during bean initialization or bean destruction;
+
+>> Init: method configuration
+
+<beans ... >
+    <bean   id="myCoach"
+         class="qualifiedName"
+         init-method="doMyStartupStuff">
+         ...
+    </bean>
+</beans>
+
+> init-method: Set up bean initialization
+> 'doMyStartupStuff': Any method name
+
+>> Destroy: method configuration
+
+<beans ... >
+    <bean id="myCoach"
+        class="qualifiedName"
+        destroy-method="doMyCleanupStuff">
+        ...
+    </bean>
+
+</beans>
+
+> destroy-method: Set up bean destroy method
+> 'doMyCleanupStuff': Any method name 
+
+>> Development Process:
+> Define your methods for init and destroy
+> Configure the method names in Spring config file
+
+>> Special note about destroy lifecycle and prototype scope 
+
+> There is a subtle point you need to be aware of with "prototype" scoped beans;
+  > For "prototype" scoped beans, Spring does not call the destroy method. 
