@@ -1,0 +1,87 @@
+>> How to configure spring with java annotations:
+
+> What are java annotations?
+
+    > Special labels/markers added to Java classes
+    > Provide meta-data about the class
+      e.g. :-
+      Meta-data about a 'boot':
+      Boot 
+      Color: Silver
+      Style: Jewel
+      Code: 1998
+      SKU: 1243234
+      Size: UK 8
+      Size: US 10
+    > Processed at compile time or run-time for special processing;
+
+> Annotation Example:
+
+public class TrackCoach implements Coach {
+
+    @Override
+    public String getDailyWorkout(){
+        return "Run a hard 5k";
+    }
+    ...
+}
+// Here "@Override" tell compiler we're overriding a method;
+// At compilation time, compiler will check/verify the Override;
+// And here '@Override' is a annotation;
+
+>> Why spring configuration with annotations?
+    > XML configuration can be verbose;
+    > Configure your Spring beans with Annotations;
+    > Annotations minimizes the XML configuration;
+
+>> Scanning for component classes:
+    > Spring will scan your java classes for special annnotations;
+    > Automatically register the beans in the spring container;
+
+>> Development Process:
+    > Enable compenent scanning in Spring config file;
+    > Add the @Component annotation to your java classes;
+    > Retrieve bean from Spring conatiner;
+
+Step 1 : Enable component scanning in Spring config file
+
+<beans ... >
+    <context:component-scan base-package="com.luv2code.springdemo" />
+</beans>
+
+// Spring will scan this package (recursively);
+
+Step 2 : Add the @Component annotation to your java classes
+
+@Component("thatSillyCoach")
+public class TennisCoach implements Coach {
+
+    @Override
+    public String getDailyWorkout(){
+        return "Practice your backhand volley";
+    }
+}
+// @Component is a Annotation, 'thatSillyCoach' is beanID and it will register this Spring bean automatically;
+
+Step 3 : Retrieve bean from Spring conatiner
+
+> Same as before ... nothing changes.
+
+Coach theCoach = context.getBean("thatSillyCoach", Coach.class);
+
+
+>> @Components : Default beanID 
+> Spring also supports Default Bean IDs 
+  > Default bean id: the class name, 'make first letter lower-case'
+  >Class Name: 'TennisCoach' , Default Bean Id: 'tennisCoach'
+
+Example:
+
+@Component 
+public class TennisCoach implements Coach {
+    ...
+}
+
+// get the bean from spring container
+Coach theCoach = context.getBean("tennisCoach", Coach.class);
+
