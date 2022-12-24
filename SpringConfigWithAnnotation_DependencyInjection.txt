@@ -1,0 +1,151 @@
+>> Spring dependency injection with annotations and autowiring
+
+> What is Spring AutoWriring?
+> For dependency injection, Spring can use auto wiring;
+> Spring will look for a class that matches the property;
+  > matches by type: class or interface
+> Spring will inject it automatically ... hence it is autowired;
+
+>> AutoWriring Example:
+> Injecting FortuneService into a Coach implementation;
+> Spring will scan @Components
+> Any one implements FortuneService interface?
+> If so, let's inject them. For example: HappyFortuneService
+
+>> AutoWriring Injection Types
+   > Constructor Injection
+   > Setter Injection
+   > Field Injections
+
+>> Development Process - Constructor Injection
+1> Define the dependency interface and class
+2> Create a constructor in your class for injections 
+3> Configure the dependency injection with @Autowired annotation
+
+Step 1 : Define the dependency interface and class 
+
+File: FortuneService.java
+public interface FortuneService{
+    public String fortuneService();
+}
+
+File: HappyFortuneService.java
+@Component
+public class HappyFortuneService implements FortuneService{
+
+    public String getFortune(){
+        return "Today is your lucky day!";
+    }
+}
+
+Step 2 : Create a constructor in your class for injections
+
+File: TennisCoach.java
+@Component
+public class TennisCoach implements Coach{
+    
+    private FortuneService fortuneService;
+
+    public TennisCoach(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+
+}
+
+Step 3 : Configure the dependency injection @Autowired annotation
+
+File: TennisCoach.java
+@Component
+public class TennisCoach implements Coach{
+    
+    private FortuneService fortuneService;
+
+    @Autowired
+    public TennisCoach(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+
+}
+
+
+>> Development Process - Setter Injection
+1> Create setter method(s) in your class for injections 
+2> Configure the dependency injection with @Autowired annotation 
+
+Step 1 : create setter method in your class 
+File: TennisCoach.java
+@Component
+public class TennisCoach implements Coach {
+
+    private FortuneService fortuneService;
+    
+    public TennisCoach(){
+
+    }
+
+    public void setFortuneService(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+}
+
+Step 2 : Configure the dependency injection with Autowired Annotation 
+File: TennisCoach.java
+@Component
+public class TennisCoach implements Coach {
+
+    private FortuneService fortuneService;
+    
+    public TennisCoach(){
+
+    }
+    #Autowired
+    public void setFortuneService(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+}
+
+>> Inject dependencies by calling ANY method on your class 
+    > Simply give: @Autowired
+
+Example: 
+Step 2 : Configure the dependency injection with Autowired Annotation 
+File: TennisCoach.java
+@Component
+public class TennisCoach implements Coach {
+
+    private FortuneService fortuneService;
+    
+    public TennisCoach(){
+
+    }
+    #Autowired
+    public void doSomeCrazyStuff(FortuneService fortuneService){
+        this.fortuneService = fortuneService;
+    }
+}
+
+>> Field injection with annotations and autowiring
+
+> Inject dependencies by setting field values on your class directly(even private fields)
+    > Accomplished by using 'Java Reflection'
+
+>> Development Process - Field Injection 
+
+1> Configure the dependency injection with Autowired Annotation
+    > Applies directly to the field 
+    > No need for setter methods
+
+Step 1 : Configure the dependency injection with Autowired 
+File: TennisCoach.java
+public class TennisCoach implements Coach{
+
+    @Autowired
+    private FortuneService fortuneService;
+
+    public TennisCoach(){
+
+    }
+
+    // no need for setter methods
+    ...
+}

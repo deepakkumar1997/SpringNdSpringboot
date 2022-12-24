@@ -1,0 +1,23 @@
+>> Autowiring 
+> Injecting FortuneService into a Coach implementation
+> Spring will scan @Component
+> Any one implements FortuneService interface???
+> What if we have multiple FortuneService implementation 
+> If so, let's inject them ... however which one?
+
+>> Solution: Be specific! - @Qualifier
+
+@Component
+public class TennisCoach implements Coach {
+    
+    @Autowired
+    @Qualifier("happyFortuneService")
+    private FortuneService fortuneService;
+
+}
+
+>> Injection Types:
+> Can apply @Qualifier annotation to 
+    > Constructor injection 
+    > Setter injection methods 
+    > Field injection
