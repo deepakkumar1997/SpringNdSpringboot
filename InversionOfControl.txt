@@ -10,6 +10,9 @@
   > Create and manage objects(Inversion of Control)
   > Inject object's dependencies(Dependency Injection) 
 
+> So what is IoC, so IoC means creation and management of objects by spring;
+> And what does DI means so it means injecting field and methods related to the object(which is created by IoC);
+
 > Configuring Spring Container:
   > XML configuration file(legacy, but most legacy apps still use this)
   > Java Annotations(modern)
