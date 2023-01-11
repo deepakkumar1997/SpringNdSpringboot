@@ -1,0 +1,132 @@
+>> Spring configuration with Java code 
+
+>> Java Configuration 
+> Instead of configuring Spring container using XML
+> Configure the Spring container with Java code 
+
+> So no need of xml configuration file as we use java code to configure;
+
+>> Three ways of configuring spring container
+1> Full XML Configuration
+2> XML Component Scan 
+3> Java Configuration Class 
+
+>> Development Process:
+1> Create a Java class and annotate as @Configuration
+2> Add component scanning support: @ComponentScan(optional)
+3> Read Spring Java configuration class 
+4> Retrieve bean from Spring container
+
+Step 1 : Create a Java class and annotate as @Configuration
+
+@Configuration
+public class SportConfig{
+
+}
+
+Step 2 : Add Component scanning support: @ComponentScan 
+
+@Configuration
+@ComponentScan("com.deepak.springdemo") // this will scan component in package 'com.deepak.springdemo'
+public class SportConfig{
+
+}
+
+Step 3 : Read spring java configuration class 
+
+AnnotationConfigApplicationContext context =
+        new AnnotationConfigApplicationContext(SportConfig.class);
+
+Step 4 : Retrieve bean from Spring container
+
+Coach theCoach = context.getBean("tennisCoach", Coach.class);
+
+
+>> Defining beans with java code :
+
+>> Development Process:
+1> Define method to expose bean
+2> Inject bean dependencies
+3> Read Spring Java configuraion class 
+4> Retrieve bean from Spring container
+
+Step 1 : Define method to expose bean 
+
+@Configuration
+public class SportConfig {
+    @Bean 
+    public Coach swimCoach(){
+        SwimCoach mySwimCoach = new SwimCoach();
+        return mySwimCoach;
+    }
+}
+// Define each bean individually in this config class like we do in xml 
+
+> What about our dependencies?
+> In case our Coach interface is dependent on like FortuneService 
+
+Step 2 : Inject bean dependencies 
+
+@Configuration
+public class SportConfig{
+
+    @Bean
+    public FortuneService happyFortuneService(){
+        return new HappyFortuneService();
+    }
+
+    @Bean
+    public Coach swimCoach(){
+        SwimCoach mySwimCoach = new SwimCoach(happyFortuneService());
+        
+        return mySwimCoach;
+    }
+}
+
+Step 3 : Read spring java configuration class 
+
+AnnotationConfigApplicationContext context =
+        new AnnotationConfigApplicationContext(SportConfig.class);
+
+Step 4 : Retrieve bean from Spring container
+
+Coach theCoach = context.getBean("tennisCoach", Coach.class);
+
+
+>> Injecting values from property file:
+
+>> Development Process:
+1> Create properties file 
+2> Load properties file in spring config
+3> Reference values from properties file 
+
+Step 1 : Create properties file 
+
+File: sport.properties
+foo.email = myhardcoach@dkcode.com
+foo.team = stonehenge 
+
+Step 2 : Load properties file in spring config
+
+@Configuration
+@PropertySource("classpath:sport.properties") // It will load properties file 
+public class SportConfig {
+
+}
+
+Step 3 : Reference values from properties file 
+
+File: SwimCoach.java 
+public class SwimCoach implements Coach {
+
+    // Field Injection
+    
+    @Value("${foo.email}")
+    private String email;
+
+    @Value("${foo.team}")
+    private String team;
+
+    ...
+}
+
