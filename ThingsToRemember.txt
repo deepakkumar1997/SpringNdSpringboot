@@ -1,0 +1,4 @@
+> Inversion of control: means (asking spring to) create an object 
+> Dependency Injection: means injecting field values or calling methods
+  (Simply caliing methods and assigning value to fields of an object)
+
