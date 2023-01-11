@@ -1,0 +1,249 @@
+>> What is spring MVC?
+
+> It is a framework for building web application in Java;
+> Based on Model-View-Controller design pattern;
+> Leverages features of the Core Spring framework(IoC, DI);
+
+>> Spring MVC benefits :
+
+> The Spring way of building web app UIs in Java;
+> Leverage a set of reusable UI components;
+> Help manage application state for web requests;
+> Process form data: validation, conversion etc
+> Flexible configuration for the view layer;
+
+>> Spring MVC Behind the Scenes:
+
+> Components of a Spring MVC Application:
+    > A set of web pages to layout UI components;
+    > A collection of Spring beans(controllers, services, etc...)
+    > Spring configuration(XML, Annotations or Java)
+
+>> Spring MVC Front Controller:
+
+> Front controller known as "DispatcherServlet"
+    > Part of the Spring Frmaework 
+    > Already developed by Spring Dev Team 
+    > This is part of Spring jar files which we download
+
+>> As a developer: You will create:
+    > Model objects 
+    > View templates
+    > Controller classes
+
+> We write business/processing logic in 'controllers' and 'view template' is actually a view page through which
+  we render the date(like jsp page);
+
+>> Controller:
+
+> Code created by developer 
+> Contains business logic 
+    > Handle the request 
+    > Store/retrieve data (db, web service...)
+    > Place data in model 
+
+> Send to appropriate view template (using model objects)
+
+>> Model:
+
+> Model: contains your data 
+> Store/retrieve data via backend systems
+    > database, web service, etc...
+    > Use a Spring bean if you like 
+
+> Place your data in the model 
+    > Data can be any Java object/collection 
+
+> Model is like a container for shipping data between various part of Spring MVC application;
+
+>> View Template:
+
+> Spring MVC is flexible 
+    > Supports many view templates
+
+> Most common is JSP + JSTL 
+
+> Developer creates a page 
+    > Displays data 
+
+> Other view template 
+
+> Other view templates supported 
+    > Thymeleaf, Groovy 
+    > Velocity, Freemaker, etc ...
+
+>> Development environment setup
+
+> Configure Spring MVC:
+
+> Spring MVC Configuration Process - Part 1 
+    > Add configurations to file: WEB-INF/web.xml 
+      1> Configure Spring MVC DispatcherServlet
+      2> Set up URL mappings to Spring MVC DispatcherServlet
+
+> Spring MVC Configuration Process - Part 2 
+    > Add configurations to file: WEB-INF/spring-mvc-demo-servlet.xml 
+      3> Add support for Spring component scanning
+      4> Add support for conversion, formatting and validation;
+      5> Configure Spring MVC View Controller 
+
+Step 1 : Configure Spring DispatcherServlet
+
+File: web.xml 
+<web-app>
+
+    <servlet> 
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring-mvc-demo-servlet.xml</parm-value>
+    </init-param>
+
+    <load-on-startup>Deepak</load-on-startup>
+    </servlet>
+
+</web-app>
+
+Step 2 : Set up URL mappings to Spring MVC DispatcherServlet
+
+File: web.xml 
+<web-app>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        ...
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+> Here one thing keep in mind that 'servlet-name' should be same in <servlet> and <servlet-mapping>;
+
+Step 3 : Add support for Spring component scanning 
+
+File: spring-mvc-demo-servlet.xml 
+<beans>
+
+    <!-- Step3: Add support for component scanning -->
+    <context:component-scan base-package="com.luv2code.springdemo">
+
+</beans>
+
+Step 4 : Add support for conversion, formatting and validation 
+
+file: spring-mvc-demo-servlet.xml 
+<benas>
+
+    <!-- Step3: Add support for component scanning -->
+    <context:component-scan base-package="com.luv2code.springdemo">
+
+    <!-- Step 4: Add support for conversion, formatting and validation support -->
+    <mvc:annotation-driven/>
+
+</beans>
+
+Step 5 : Configure Spring MVC View Resolver
+
+file: spring-mvc-demo-servlet.xml
+<benas>
+
+    <!-- Step3: Add support for component scanning -->
+    <context:component-scan base-package="com.luv2code.springdemo">
+
+    <!-- Step 4: Add support for conversion, formatting and validation support -->
+    <mvc:annotation-driven/>
+
+    <!-- Step 5: Define Spring MVC View resolver -->
+    <bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </beans>
+
+</beans>
+
+> View Resolver Configs - Explained 
+> When your app provides a "view" name, Spring MVC will 
+    > prepend the prefix 
+    > append the suffix 
+Example:
+        /WEB-INF/view/show-student-list.jsp 
+> So, here /WEB-INF/view/ is added as suffix and .jsp is added as prefix;
+
+
+
+>> Our first controller class:
+
+>> Development Process:
+1> Create Controller class
+2> Define Controller method
+3> Add Request Mapping to Controller method 
+4> Return View Name
+5> Develop View Page 
+
+Step 1 : Create Controller class
+> Annotate class with @Controller
+  > @Controller inherits from @Component ... supports scannning
+
+  @Controller
+  public class HomeController{
+
+  }
+
+Step 2 : Define Controller method
+
+  @Controller
+  public class HomeController{
+
+    public String showMyPage(){
+        ...
+    }
+  }
+
+Step 3 : Add Request Mapping to Controller method
+
+  @Controller
+  public class HomeController{
+
+    @RequestMapping("/") // web request method like get, post currently it is pointing to root 
+    public String showMyPage(){
+        ...
+    }
+  }
+
+> Annotation maps a path to a method name; That's why you choose any method name;
+
+Step 4 : Return View Name 
+
+    @Controller
+    public class HomeController{
+
+        @RequestMapping("/") // web request method like get, post currently it is pointing to root 
+        public String showMyPage(){
+            return "main-menu";
+        }
+    }
+
+> Finding the View Page 
+<bena 
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/view/" />    
+    <property name="suffix" value=".jsp" />    
+<benn />
+
+> So path of the view will be "/WEB-INF/view/main-menu.jsp"
+
+Step 5 : Develop View Page 
+
+File: /WEB-INF/view/main-menu.jsp 
+
+<html><body>
+<h2>Spring MVC Demo - Home Page </h2>
+</body></html>
